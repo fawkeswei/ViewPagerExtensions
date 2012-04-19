@@ -77,7 +77,7 @@ public class SwipeyTabsView extends RelativeLayout implements OnPageChangeListen
 	public SwipeyTabsView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		
-		setHorizontalFadingEdgeEnabled(false);
+		setHorizontalFadingEdgeEnabled(true);
 		setFadingEdgeLength((int) (getResources().getDisplayMetrics().density * SHADOW_WIDTH));
 		setWillNotDraw(false);
 		
@@ -423,7 +423,7 @@ public class SwipeyTabsView extends RelativeLayout implements OnPageChangeListen
 		
 		Direction dir = Direction.None;
 		
-		if (position != mPosition && positionOffset == 0.0f) {
+		if (position != mPosition) {
 			mPosition = position;
 			calculateNewPositions(true);
 		}
@@ -463,12 +463,9 @@ public class SwipeyTabsView extends RelativeLayout implements OnPageChangeListen
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onPageSelected(int position) {
-		
-	}
+	public void onPageSelected(int position) {}
 	
 	
-
 	/**
 	 * Helper class which holds different positions (and the width) for a tab
 	 * 
@@ -516,10 +513,12 @@ public class SwipeyTabsView extends RelativeLayout implements OnPageChangeListen
 				mPager.beginFakeDrag();
 				break;
 			case MotionEvent.ACTION_MOVE:
+				if (!mPager.isFakeDragging()) break; 
 				mPager.fakeDragBy((mDragX - x) * (-1));
 				mDragX = x;
 				break;
 			case MotionEvent.ACTION_UP:
+				if (!mPager.isFakeDragging()) break;
 				mPager.endFakeDrag();
 				break;
 		}
